@@ -31,4 +31,19 @@ io.on("connection", (socket) => {
     console.log(`user:call - ${to}`, offer);
     io.to(to).emit("incoming:call", { from: socket.id, offer });
   });
+
+  // when user accpets the call
+  // socket data :-
+  // to : socketId (which is "from" of user:call),
+  // ans :
+  socket.on("call:accepted", ({ to, ans }) => {
+    console.log("call accepted : ", to, ans);
+
+    io.to(to).emit("call:accepted", { from: socket.id, ans });
+  });
+
+  // negotiation socket
+  socket.on("peer:nego:needed", ({ to, offer }) => {
+    io.to(to).emit("peer:nego:needed", { from: socket.id, offer });
+  });
 });
